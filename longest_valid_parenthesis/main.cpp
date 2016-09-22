@@ -1,10 +1,34 @@
+#include <stack>
 #include <string>
 #include <ctime>
 #include <iostream>
 
 using namespace std;
 
-int longestValidParentheses(string s) {
+int longestValidParentheses1(string s) {
+    stack<int> q;
+    q.push(-1);
+    int m = 0;
+    for (char c : s) {
+        switch(c) {
+            case '(':
+                q.push(0);
+                break;
+            case ')':
+                int n = 1;
+                while (q.top() > 0) { n += q.top(); q.pop(); }
+                if (q.top() == 0) {
+                    q.pop();
+                    while (q.top() > 0) { n += q.top(); q.pop(); }
+                    q.push(n);
+                    m = max(n, m);
+                }
+        }
+    }
+    return 2*m;
+}
+
+int longestValidParentheses2(string s) {
     if (s.size() < 2) return 0;
     int n = s.size(), a[s.size()];
     a[n-1] = 0;
@@ -43,9 +67,15 @@ int main() {
     double cpu_duration;
 
     startcputime = clock();
-    auto r = longestValidParentheses(s);
+    auto r1 = longestValidParentheses1(s);
     cpu_duration = (clock() - startcputime) / (double) CLOCKS_PER_SEC;
     cout << "ms: " << cpu_duration*1000.0 << endl;
 
-    cout << "maxlen: " << r << endl;
+    startcputime = clock();
+    auto r2 = longestValidParentheses2(s);
+    cpu_duration = (clock() - startcputime) / (double) CLOCKS_PER_SEC;
+    cout << "ms: " << cpu_duration*1000.0 << endl;
+
+    cout << "maxlen1: " << r1 << endl;
+    cout << "maxlen2: " << r2 << endl;
 }
