@@ -4,6 +4,17 @@
 
 using namespace std;
 
+/*
+ * Expected number of calls to rand4() in rand7a():
+ *
+ *   Let p = 1/25 be the probability of getting the pair (4,4),
+ *   which is discarded to avoid overcounting 0.
+ *   E[calls] = 2[(1-p) + p(2[(1-p) + p(...)])]
+ *            = 2(1-p)*sum_{k=0}^{\infty} (2p)^k
+ *            = 2(1-p)/(1-2p)
+ *            = 2 + 2/23
+ */
+
 class Random {
     mt19937 gen{1};
     uniform_int_distribution<int> r4{0,4};
