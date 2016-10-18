@@ -6,6 +6,19 @@
 using namespace std;
 
 void nextPermutation(vector<int>& a) {
+    if (a.empty()) return;
+    auto i = prev(a.end()), j = i;
+    while (i != a.begin() && *(--i) >= *j) --j;
+    if (*i < *j) {
+        j = prev(a.end());
+        while (*i >= *j) --j;
+        iter_swap(i, j);
+        ++i;
+    }
+    reverse(i, a.end());
+}
+
+void nextPermutation1(vector<int>& a) {
     if (a.size() < 2) return;
     int n = a.size(), i = n-2;
     for (; i >= 0; --i) {
@@ -21,7 +34,7 @@ void nextPermutation(vector<int>& a) {
 }
 
 int main() {
-    vector<int> a({1,3,2,4,2,3,4,2,1,2,3,4,2}); // [2,1,3]
+    vector<int> a({1,3,2,4}); // [2,1,3]
 
     clock_t startcputime;
     double cpu_duration;
