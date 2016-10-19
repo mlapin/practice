@@ -33,21 +33,42 @@ void nextPermutation1(vector<int>& a) {
     sort(&a[i+1], &a[n]);
 }
 
+vector<int> getPermutation(int n, int k) {
+    if (n < 1 || k < 1) return {};
+    vector<int> a(n), q(n);
+    for (int i = 1, r = k-1; i <= n; ++i) {
+        a[n-i] = i;
+        q[n-i] = r % i;
+        r = r / i;
+    }
+    for (int i = 0; i < n-1; ++i) {
+        int j = n-1 - q[i];
+        while (i < j--) swap(a[j], a[j+1]);
+    }
+    return a;
+}
+
 int main() {
-    vector<int> a({1,3,2,4}); // [2,1,3]
+    vector<int> a({1,2,3,4,5}); // [2,1,3]
 
     clock_t startcputime;
     double cpu_duration;
 
-    for (auto i : a) cout << i << " ";
-    cout << endl;
-    
+    //for (auto i : a) cout << i << " ";
+    //cout << endl;
+
     startcputime = clock();
-    for (int iter = 0; iter < 20; ++iter) {
-        nextPermutation(a);
+    for (int iter = 0; iter < 24; ++iter) {
+        cout << iter + 1 << ": ";
         for (auto i : a) cout << i << " ";
         cout << endl;
+        nextPermutation(a);
     }
     cpu_duration = (clock() - startcputime) / (double) CLOCKS_PER_SEC;
     cout << "ms: " << cpu_duration*1000.0 << endl;
+
+    auto v = getPermutation(a.size(), 24);
+    cout << 24 << ": ";
+    for (auto x : v) cout << x << " ";
+    cout << endl;
 }
